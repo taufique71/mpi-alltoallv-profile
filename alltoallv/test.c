@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
 #include <mpi.h>
 
@@ -20,6 +21,7 @@ int main(int argc, char** argv){
     int local_data_volume = (myrank < nprocs-1) ? (total_data_volume / nprocs) : (total_data_volume - (total_data_volume / nprocs) * myrank);
 
     char* send_data = (char*) malloc(local_data_volume*sizeof(char));
+    memset(send_data, 'c', local_data_volume);
 
     double p = (param_2*1.0)/100.0;
     double* distribution = (double*) malloc(nprocs*sizeof(double));
@@ -57,7 +59,9 @@ int main(int argc, char** argv){
         /*for(int i = 0; i < nprocs; i++){*/
             /*printf("%10d\t%10d\n", rdispls[i], recvcnt[i]);*/
         /*}*/
-        printf("nprocs: %d\tdistribution_param: %0.2lf\tdata_volume: %d GB\tcommunication_time: %0.10lf seconds\n",
+        /*printf("nprocs: %d\tdistribution_param: %0.2lf\tdata_volume: %d GB\tcommunication_time: %0.10lf seconds\n",*/
+                /*nprocs, p, param_1, runtime);*/
+        printf("%d, %0.2lf, %d, %0.10lf\n",
                 nprocs, p, param_1, runtime);
     }
     MPI_Finalize();
