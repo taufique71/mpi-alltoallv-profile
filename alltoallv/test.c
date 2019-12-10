@@ -15,13 +15,13 @@ int main(int argc, char** argv){
         MPI_Abort(MPI_COMM_WORLD, MPI_ERR_OTHER);
     }
     
-    int param_1 = atoi(argv[1]); // Indicates total data volume
-    int param_2 = atoi(argv[2]); // Indicates probability distribution which denotes how the data distribution would look like after all to all
-    int total_data_volume = param_1 * 1000000000;
+    double param_1 = atof(argv[1]); // Indicates total data volume
+    int param_2 = atof(argv[2]); // Indicates probability distribution which denotes how the data distribution would look like after all to all
+    int total_data_volume = (int)(param_1 * 1000000000);
     int local_data_volume = (myrank < nprocs-1) ? (total_data_volume / nprocs) : (total_data_volume - (total_data_volume / nprocs) * myrank);
 
-    /*char* send_data = (char*) malloc(local_data_volume*sizeof(char));*/
-    long long int* send_data = (long long int*) malloc(local_data_volume*sizeof(long long int));
+    char* send_data = (char*) malloc(local_data_volume*sizeof(char));
+    /*long long int* send_data = (long long int*) malloc(local_data_volume*sizeof(long long int));*/
     memset(send_data, 123456789, local_data_volume);
 
     double p = (param_2*1.0)/100.0;
@@ -43,8 +43,8 @@ int main(int argc, char** argv){
         rdispls[i] = rdispls[i-1] + recvcnt[i-1];
     }
     int recv_data_volume = rdispls[nprocs-1] + recvcnt[nprocs-1];
-    /*char* recv_data = (char*) malloc(recv_data_volume*sizeof(char));*/
-    long long int* recv_data = (long long int*) malloc(recv_data_volume*sizeof(long long int));
+    char* recv_data = (char*) malloc(recv_data_volume*sizeof(char));
+    /*long long int* recv_data = (long long int*) malloc(recv_data_volume*sizeof(long long int));*/
     int count = 3;
     double t0 = MPI_Wtime();
     for(int i = 0; i < count; i++){
@@ -63,8 +63,8 @@ int main(int argc, char** argv){
         /*}*/
         /*printf("nprocs: %d\tdistribution_param: %0.2lf\tdata_volume: %d GB\tcommunication_time: %0.10lf seconds\n",*/
                 /*nprocs, p, param_1, runtime);*/
-        printf("%d, %0.2lf, %d, %0.10lf\n",
-                nprocs, p, param_1*8, runtime);
+        printf("%d, %0.2lf, %lf, %0.10lf\n",
+                nprocs, p, param_1, runtime);
     }
     MPI_Finalize();
     return 0;
