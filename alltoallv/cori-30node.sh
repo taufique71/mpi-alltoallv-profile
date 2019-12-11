@@ -9,4 +9,4 @@
 #SBATCH -J alltoallv-cori-30nodes
 #SBATCH -o alltoallv-cori-30nodes.o%j
 
-srun -N 30 --ntasks-per-node 64 ./alltoallv-test 0.001 10
+srun -N 30 --ntasks-per-node 64 ./alltoallv-test 1 10
